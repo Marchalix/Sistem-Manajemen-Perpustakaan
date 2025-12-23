@@ -1,13 +1,8 @@
 package org.example.gui;
 
-<<<<<<< HEAD
 import org.example.data.BookData;
 import org.example.data.BookManager;
 
-=======
-import org.example.gui.*;
-import org.example.data.*;
->>>>>>> 62f1b8584195faeae707ca36ccce4a25e1e48564
 import javax.swing.*;
 import java.awt.*;
 
