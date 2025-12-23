@@ -1,24 +1,56 @@
 package org.example.data;
 
 import org.example.util.FileUtil;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberManager {
-    private static final String FILE = "database/members.csv";
+    // Pastikan path ini sesuai dengan file detektif kemarin (path absolut kalau perlu)
+    private static final String FILE = "Sistem-Manajemen-Perpustakaan/database/Member.csv";
 
     public static List<MemberData> getAll() {
         List<MemberData> list = new ArrayList<>();
         for (String l : FileUtil.read(FILE)) {
-            list.add(MemberData.fromCSV(l));
+            MemberData m = MemberData.fromCSV(l);
+            if (m != null) list.add(m);
         }
         return list;
     }
 
-    public static MemberData login(String id, String pw) {
+    // --- REVISI LOGIN ---
+    // Sekarang login mencocokkan ID (Username) dengan Password
+    public static MemberData login(String username, String pw) {
         for (MemberData m : getAll()) {
-            if (m.id.equals(id) && m.password.equals(pw)) return m;
+            // Cek ID (sebagai username)
+            if (m.id.equalsIgnoreCase(username) && m.password.equals(pw)) {
+                return m;
+            }
         }
         return null;
+    }
+
+    // --- FITUR BARU: CEK USERNAME KEMBAR ---
+    public static boolean isUsernameExist(String username) {
+        for (MemberData m : getAll()) {
+            if (m.id.equalsIgnoreCase(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void initAdmin() {
+        if (getAll().isEmpty()) {
+            MemberData admin = new MemberData();
+            // Admin default
+            admin.id = "admin";           // Username
+            admin.namaAnggota = "Administrator"; // Nama Lengkap
+            admin.jenisKelamin = "L";
+            admin.password = "admin";
+            admin.role = "admin";
+            add(admin);
+        }
     }
 
     public static void add(MemberData m) {
@@ -35,4 +67,3 @@ public class MemberManager {
         FileUtil.write(FILE, out);
     }
 }
-
