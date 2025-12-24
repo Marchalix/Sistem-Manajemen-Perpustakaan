@@ -19,14 +19,14 @@ public class SignupFrame extends JDialog {
         setLayout(new BorderLayout());
         getContentPane().setBackground(StyleUtil.BG_COLOR);
 
-        // --- HEADER ---
+        // HEADER
         JLabel lblTitle = new JLabel("DAFTAR AKUN", SwingConstants.CENTER);
         lblTitle.setFont(StyleUtil.FONT_HEADER);
         lblTitle.setForeground(StyleUtil.PRIMARY_COLOR);
         lblTitle.setBorder(new EmptyBorder(20, 0, 20, 0));
         add(lblTitle, BorderLayout.NORTH);
 
-        // --- FORM ---
+        // FORM
         JPanel formPanel = new JPanel(new GridLayout(8, 1, 5, 5)); // Tambah baris
         formPanel.setBackground(StyleUtil.BG_COLOR);
         formPanel.setBorder(new EmptyBorder(0, 40, 0, 40));
@@ -57,23 +57,31 @@ public class SignupFrame extends JDialog {
 
         add(formPanel, BorderLayout.CENTER);
 
-        // --- BUTTONS ---
+        // BUTTONS
         JPanel btnPanel = new JPanel(new FlowLayout());
         btnPanel.setBackground(StyleUtil.BG_COLOR);
         btnPanel.setBorder(new EmptyBorder(20, 0, 20, 0));
 
         JButton btnRegister = new JButton("Daftar Sekarang");
         StyleUtil.styleButton(btnRegister);
-        btnRegister.setPreferredSize(new Dimension(200, 40));
+        btnRegister.setPreferredSize(new Dimension(150, 40));
 
         btnPanel.add(btnRegister);
         add(btnPanel, BorderLayout.SOUTH);
 
-        // --- ACTION REGISTER ---
+        JButton btnBack = new JButton("Back");
+        btnPanel.add(btnBack);
+
+        StyleUtil.styleButton(btnBack);
+        btnBack.setPreferredSize(new Dimension(100, 40));
+
+        // ACTION REGISTER
         btnRegister.addActionListener(e -> {
             String username = txtUsername.getText().trim();
             String nama = txtNama.getText().trim();
             String pass = txtPassword.getText();
+
+
 
             // Validasi Input
             if (username.isEmpty() || nama.isEmpty() || pass.isEmpty()) {
@@ -106,6 +114,11 @@ public class SignupFrame extends JDialog {
 
             JOptionPane.showMessageDialog(this, "Registrasi Berhasil! Silakan Login dengan username: " + username);
             dispose();
+        });
+
+        btnBack.addActionListener(e -> {
+            new LoginFrame(); // buka halaman awal
+            dispose();        // tutup halaman signup
         });
     }
 

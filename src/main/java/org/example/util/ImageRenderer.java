@@ -6,36 +6,36 @@ import java.awt.*;
 import java.io.File;
 
 public class ImageRenderer extends DefaultTableCellRenderer {
+    private static final String ASSETS_DIR = "assets/cover/";
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value,
+                                                   boolean isSelected, boolean hasFocus,
+                                                   int row, int column) {
         JLabel label = new JLabel();
         label.setHorizontalAlignment(JLabel.CENTER);
 
-        // Jika value adalah path gambar
         if (value != null) {
-            String path = value.toString();
-            File file = new File(path);
+            String fileName = value.toString();
+            File file = new File(ASSETS_DIR + fileName);
+
+            if (!file.exists()) {
+                file = new File(ASSETS_DIR + "default.jpg"); // fallback default
+            }
 
             if (file.exists()) {
-                // Resize gambar agar muat di baris tabel
-                ImageIcon icon = new ImageIcon(path);
+                ImageIcon icon = new ImageIcon(file.getAbsolutePath());
                 Image img = icon.getImage().getScaledInstance(60, 80, Image.SCALE_SMOOTH);
                 label.setIcon(new ImageIcon(img));
             } else {
-                label.setText("No Cover"); // Jika file tidak ditemukan
+                label.setText("No Cover");
             }
         } else {
             label.setText("No Data");
         }
 
-        // Warna Background saat diklik
-        if (isSelected) {
-            label.setBackground(table.getSelectionBackground());
-            label.setOpaque(true);
-        } else {
-            label.setBackground(Color.WHITE);
-            label.setOpaque(true);
-        }
+        label.setOpaque(true);
+        label.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
 
         return label;
     }

@@ -1,4 +1,4 @@
-package example.gui;
+package org.example.gui;
 
 import org.example.data.BookData;
 import org.example.data.BookManager;
@@ -9,6 +9,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class BookPanel extends JDialog {
     private JTextField txtKode, txtJudul, txtPengarang;
@@ -62,7 +65,7 @@ public class BookPanel extends JDialog {
         JPanel pnlImg = new JPanel(new BorderLayout());
         pnlImg.setBackground(Color.WHITE);
         lblPath = new JLabel("No File");
-        JButton btnBrowse = new JButton("Cari...");
+        JButton btnBrowse = new JButton("Pilih Cover");
         pnlImg.add(lblPath, BorderLayout.CENTER);
         pnlImg.add(btnBrowse, BorderLayout.EAST);
         form.add(pnlImg);
@@ -86,18 +89,45 @@ public class BookPanel extends JDialog {
             spinTahun.setValue(bookToEdit.tahun);
             spinStock.setValue(bookToEdit.stockTersedia);
             cmbStatus.setSelectedItem(bookToEdit.status);
-            lblPath.setText(new File(bookToEdit.coverPath).getName());
-            lblPath.putClientProperty("path", bookToEdit.coverPath);
+            lblPath.setText(new File(bookToEdit.cover).getName());
+            lblPath.putClientProperty("path", bookToEdit.cover);
         }
 
         // --- EVENTS ---
         btnBrowse.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
-            fc.setFileFilter(new FileNameExtensionFilter("Gambar (JPG, PNG)", "jpg", "png", "jpeg"));
+
+            FileNameExtensionFilter imgFilter =
+                    new FileNameExtensionFilter(
+                            "Image Files (JPG, PNG, JPEG)",
+                            "jpg", "jpeg", "png"
+                    );
+            fc.setFileFilter(imgFilter);
+            fc.setAcceptAllFileFilterUsed(false);
+
             if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                lblPath.setText(file.getName());
-                lblPath.putClientProperty("path", file.getAbsolutePath());
+                File src = fc.getSelectedFile();
+
+                String projectDir = System.getProperty("user.dir");
+
+                File coverDir = new File(projectDir + File.separator + "assets"+ File.separator + "Cover");
+                coverDir.mkdirs();
+
+                File dest = new File(coverDir, src.getName());
+
+                try {
+                    Files.copy(
+                            src.toPath(),
+                            dest.toPath(),
+                            StandardCopyOption.REPLACE_EXISTING
+                    );
+
+                    lblPath.setText(src.getName());
+                    lblPath.putClientProperty("path", src.getName());
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Gagal upload cover");
+                }
             }
         });
 
@@ -115,14 +145,16 @@ public class BookPanel extends JDialog {
             b.stockTersedia = (int) spinStock.getValue();
             b.status = (String) cmbStatus.getSelectedItem();
 
+            // Sebelumnya bisa ambil path absolut dari JFileChooser
             Object pathObj = lblPath.getClientProperty("path");
-            // Jika path tidak diubah, gunakan path lama (untuk edit) atau "-"
             if (pathObj != null) {
-                b.coverPath = pathObj.toString();
+                // Ambil nama file saja dan simpan ke coverPath
+                File f = new File(pathObj.toString());
+                b.cover = f.getName(); // nama file saja
             } else if (isEditMode) {
-                b.coverPath = bookToEdit.coverPath; // Pakai path lama
+                b.cover = bookToEdit.cover;
             } else {
-                b.coverPath = "-";
+                b.cover = "default.jpg"; // default
             }
 
             // Panggil Manager (Method add() di codingan kamu sudah handle Update jika ID sama)

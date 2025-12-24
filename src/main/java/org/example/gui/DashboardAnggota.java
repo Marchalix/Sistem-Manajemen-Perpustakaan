@@ -240,7 +240,7 @@ public class DashboardAnggota extends JFrame {
         for (BookData b : books) {
             if (b.stockTersedia > 0) {
                 // Pastikan urutan kolom sesuai header: Cover, Kode, Judul...
-                modelBuku.addRow(new Object[]{b.coverPath, b.kode, b.judul, b.pengarang, b.tahun, b.stockTersedia});
+                modelBuku.addRow(new Object[]{b.cover, b.kode, b.judul, b.pengarang, b.tahun, b.stockTersedia});
             }
         }
     }

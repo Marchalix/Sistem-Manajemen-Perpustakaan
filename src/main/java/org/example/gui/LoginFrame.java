@@ -14,20 +14,20 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("Login Perpustakaan");
-        setSize(400, 420); // Sedikit lebih tinggi untuk tombol baru
+        setSize(400, 450); // Sedikit lebih tinggi untuk tombol baru
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         getContentPane().setBackground(StyleUtil.BG_COLOR);
 
-        // --- HEADER ---
+        // HEADER
         JLabel lblTitle = new JLabel("LOGIN SYSTEM", SwingConstants.CENTER);
         lblTitle.setFont(StyleUtil.FONT_HEADER);
         lblTitle.setForeground(StyleUtil.PRIMARY_COLOR);
         lblTitle.setBorder(new EmptyBorder(30, 0, 20, 0));
         add(lblTitle, BorderLayout.NORTH);
 
-        // --- FORM PANEL ---
+        // FORM PANEL
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(StyleUtil.BG_COLOR);
 
@@ -74,13 +74,13 @@ public class LoginFrame extends JFrame {
         wrapperPanel.setBorder(new EmptyBorder(0, 40, 0, 40));
         add(wrapperPanel, BorderLayout.CENTER);
 
-        // --- BUTTON PANEL ---
-        JPanel btnPanel = new JPanel(new GridLayout(2, 1, 0, 10)); // Grid 2 baris
+        // BUTTON PANEL
+        JPanel btnPanel = new JPanel(new GridLayout(3, 1, 0, 5)); // Grid 2 baris
         btnPanel.setBackground(StyleUtil.BG_COLOR);
-        btnPanel.setBorder(new EmptyBorder(20, 60, 30, 60)); // Margin kiri kanan agar tombol tidak terlalu lebar
+        btnPanel.setBorder(new EmptyBorder(20, 60, 10, 60)); // Margin kiri kanan agar tombol tidak terlalu lebar
 
         JButton btnLogin = new JButton("MASUK");
-        btnLogin.setPreferredSize(new Dimension(150, 40));
+        btnLogin.setPreferredSize(new Dimension(100, 40));
         StyleUtil.styleButton(btnLogin);
 
         // Tombol Daftar (Desain beda dikit biar kontras)
@@ -92,12 +92,21 @@ public class LoginFrame extends JFrame {
         btnSignup.setFocusPainted(false);
         btnSignup.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // Tombol Daftar (Desain beda dikit biar kontras)
+        JButton btnForgot = new JButton("Lupa akun? Forgot Password");
+        btnForgot.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        btnForgot.setForeground(StyleUtil.PRIMARY_COLOR);
+        btnForgot.setBackground(StyleUtil.BG_COLOR);
+        btnForgot.setBorderPainted(false); // Hilangkan border kotak
+        btnForgot.setFocusPainted(false);
+        btnForgot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         btnPanel.add(btnLogin);
         btnPanel.add(btnSignup);
+        btnPanel.add(btnForgot);
         add(btnPanel, BorderLayout.SOUTH);
 
-        // --- LOGIC ---
-
+        // LOGIC
         // 1. Logic Login
         btnLogin.addActionListener(e -> {
             String user = userField.getText();
@@ -115,6 +124,29 @@ public class LoginFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Login Gagal! Cek Username/Password.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        btnForgot.addActionListener(e -> {
+            String namaAnggota = JOptionPane.showInputDialog(this, "Masukkan Username:");
+            if (namaAnggota == null || namaAnggota.isEmpty()) return;
+
+            String newPass = JOptionPane.showInputDialog (this, "Masukkan Password Baru:");
+            if (newPass == null || newPass.isEmpty()) return;
+
+            boolean success = MemberManager.updatePassword(namaAnggota, newPass);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this,
+                        "Password berhasil diperbarui",
+                        "Sukses",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "ID tidak ditemukan",
+                        "Gagal",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
 
         // 2. Logic Buka Halaman Daftar
         btnSignup.addActionListener(e -> {

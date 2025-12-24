@@ -7,11 +7,11 @@ public class BookData {
     public int tahun;
     public int stockTersedia;
     public String status; // tersedia / dipinjam
-    public String coverPath;
+    public String cover;
 
     public String toCSV() {
         return kode + "," + judul + "," + pengarang + "," + tahun + "," +
-                stockTersedia + "," + status + "," + coverPath;
+                stockTersedia + "," + status + "," + cover;
     }
 
     public static BookData fromCSV(String line) {
@@ -23,7 +23,7 @@ public class BookData {
         b.tahun = Integer.parseInt(d[3]);
         b.stockTersedia = Integer.parseInt(d[4]);
         b.status = d[5];
-        b.coverPath = d[6];
+        b.cover = d[6];
         return b;
     }
 }

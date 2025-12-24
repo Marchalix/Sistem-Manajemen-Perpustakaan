@@ -42,7 +42,7 @@ public class DashboardAdmin extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // --- 1. HEADER (ATAS) ---
+        // 1. HEADER (ATAS)
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(Color.WHITE);
         header.setPreferredSize(new Dimension(0, 60));
@@ -60,7 +60,7 @@ public class DashboardAdmin extends JFrame {
 
         add(header, BorderLayout.NORTH);
 
-        // --- 2. SIDEBAR (KIRI) ---
+        // 2. SIDEBAR (KIRI)
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setBackground(StyleUtil.PRIMARY_COLOR);
@@ -89,7 +89,7 @@ public class DashboardAdmin extends JFrame {
 
         add(sidebar, BorderLayout.WEST);
 
-        // --- 3. MAIN CONTENT (TENGAH) ---
+        // 3. MAIN CONTENT (TENGAH)
         cardLayout = new CardLayout();
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(StyleUtil.BG_COLOR);
@@ -100,7 +100,7 @@ public class DashboardAdmin extends JFrame {
 
         add(mainContentPanel, BorderLayout.CENTER);
 
-        // --- EVENTS NAVIGASI ---
+        // EVENTS NAVIGASI
         btnHome.addActionListener(e -> cardLayout.show(mainContentPanel, "HOME"));
 
         btnBuku.addActionListener(e -> {
@@ -122,9 +122,7 @@ public class DashboardAdmin extends JFrame {
         cardLayout.show(mainContentPanel, "HOME");
     }
 
-    // =================================================================================
     // PANEL 1: HOME
-    // =================================================================================
     private JPanel createHomePanel() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBackground(StyleUtil.BG_COLOR);
@@ -147,9 +145,7 @@ public class DashboardAdmin extends JFrame {
         return p;
     }
 
-    // =================================================================================
     // PANEL 2: MANAJEMEN BUKU
-    // =================================================================================
     private JPanel createBukuPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 15));
         panel.setBackground(StyleUtil.BG_COLOR);
@@ -211,7 +207,7 @@ public class DashboardAdmin extends JFrame {
 
         // Actions
         btnAdd.addActionListener(e -> {
-            new example.gui.BookPanel(this).setVisible(true);
+            new org.example.gui.BookPanel(this).setVisible(true);
             loadDataBuku();
         });
 
@@ -222,7 +218,7 @@ public class DashboardAdmin extends JFrame {
                 String kode = (String) modelBuku.getValueAt(modelRow, 1);
                 BookData bookToEdit = findBookByKode(kode);
                 if (bookToEdit != null) {
-                    new example.gui.BookPanel(this, bookToEdit).setVisible(true);
+                    new org.example.gui.BookPanel(this, bookToEdit).setVisible(true);
                     loadDataBuku();
                 }
             } else {
@@ -247,9 +243,7 @@ public class DashboardAdmin extends JFrame {
         return panel;
     }
 
-    // =================================================================================
     // PANEL 3: DATA ANGGOTA (FITUR BARU)
-    // =================================================================================
     private JPanel createAnggotaPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 15));
         panel.setBackground(StyleUtil.BG_COLOR);
@@ -332,9 +326,7 @@ public class DashboardAdmin extends JFrame {
         return panel;
     }
 
-    // =================================================================================
     // HELPER & STYLING
-    // =================================================================================
     private JButton createSidebarBtn(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -370,7 +362,7 @@ public class DashboardAdmin extends JFrame {
         List<BookData> books = BookManager.getAll();
         for (BookData b : books) {
             modelBuku.addRow(new Object[]{
-                    b.coverPath, b.kode, b.judul, b.pengarang, b.tahun, b.stockTersedia, b.status
+                    b.cover, b.kode, b.judul, b.pengarang, b.tahun, b.stockTersedia, b.status
             });
         }
     }

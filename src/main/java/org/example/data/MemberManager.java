@@ -30,7 +30,7 @@ public class MemberManager {
         return null;
     }
 
-    // --- FITUR BARU: CEK USERNAME KEMBAR ---
+    // FITUR BARU: CEK USERNAME KEMBAR
     public static boolean isUsernameExist(String username) {
         for (MemberData m : getAll()) {
             if (m.id.equalsIgnoreCase(username)) {
@@ -38,6 +38,26 @@ public class MemberManager {
             }
         }
         return false;
+    }
+
+    public static boolean updatePassword(String id, String newPassword) {
+        List<MemberData> list = getAll();
+        boolean found = false;
+
+        List<String> out = new ArrayList<>();
+        for (MemberData m : list) {
+            if (m.id.equals(id)) {
+                m.password = newPassword;   // UPDATE
+                found = true;
+            }
+            out.add(m.toCSV());
+        }
+
+        if (found) {
+            FileUtil.write(FILE, out);
+        }
+
+        return found;
     }
 
     public static void initAdmin() {
