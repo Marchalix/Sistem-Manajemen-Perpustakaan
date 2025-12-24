@@ -84,7 +84,7 @@ public class LoginFrame extends JFrame {
         StyleUtil.styleButton(btnLogin);
 
         // Tombol Daftar (Desain beda dikit biar kontras)
-        JButton btnSignup = new JButton("Belum punya akun? Daftar");
+        JButton btnSignup = new JButton("Belum punya akun? Daftar dulu");
         btnSignup.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         btnSignup.setForeground(StyleUtil.PRIMARY_COLOR);
         btnSignup.setBackground(StyleUtil.BG_COLOR);
